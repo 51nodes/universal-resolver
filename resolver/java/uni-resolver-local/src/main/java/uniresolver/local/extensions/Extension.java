@@ -9,10 +9,12 @@ import uniresolver.result.ResolveResult;
 
 public interface Extension {
 
-	public ExtensionStatus beforeResolve(String identifier, DIDURL didUrl, Map<String, String> options, ResolveResult resolveResult, LocalUniResolver localUniResolver) throws ResolutionException;
-	public ExtensionStatus afterResolve(String identifier, DIDURL didUrl, Map<String, String> options, ResolveResult resolveResult, LocalUniResolver localUniResolver) throws ResolutionException;
+	ExtensionStatus beforeResolve(String identifier, DIDURL didUrl, Map<String, String> options, ResolveResult resolveResult,
+								  LocalUniResolver localUniResolver) throws ResolutionException;
+	ExtensionStatus afterResolve(String identifier, DIDURL didUrl, Map<String, String> options, ResolveResult resolveResult,
+								 LocalUniResolver localUniResolver) throws ResolutionException;
 
-	public abstract static class AbstractExtension implements Extension {
+	abstract class AbstractExtension implements Extension {
 
 		@Override
 		public ExtensionStatus beforeResolve(String identifier, DIDURL didUrl, Map<String, String> options, ResolveResult resolveResult, LocalUniResolver localUniResolver) throws ResolutionException {

@@ -48,19 +48,19 @@ public abstract class WebUniResolver extends HttpServlet implements HttpRequestH
 	@Override
 	public ResolveResult resolve(String identifier) throws ResolutionException {
 
-		return this.getUniResolver() == null ? null : this.getUniResolver().resolve(identifier);
+		return this.uniResolver == null ? null : this.uniResolver.resolve(identifier);
 	}
 
 	@Override
 	public ResolveResult resolve(String identifier, Map<String, String> options) throws ResolutionException {
 
-		return this.getUniResolver() == null ? null : this.getUniResolver().resolve(identifier, options);
+		return this.uniResolver == null ? null : this.uniResolver.resolve(identifier, options);
 	}
 
 	@Override
 	public Map<String, Map<String, Object>> properties() throws ResolutionException {
 
-		return this.getUniResolver() == null ? null : this.getUniResolver().properties();
+		return this.uniResolver == null ? null : this.uniResolver.properties();
 	}
 
 	/*

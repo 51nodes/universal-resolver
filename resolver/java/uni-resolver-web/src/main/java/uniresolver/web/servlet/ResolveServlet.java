@@ -84,15 +84,12 @@ public class ResolveServlet extends WebUniResolver {
 		if (request.getHeader("Accept").contains(DIDDocument.MIME_TYPE) && resolveResult.getDidDocument() != null) {
 
 			WebUniResolver.sendResponse(response, HttpServletResponse.SC_OK, DIDDocument.MIME_TYPE, resolveResult.getDidDocument().toJson());
-			return;
 		} else if (resolveResult.getContent() != null) {
 
 			WebUniResolver.sendResponse(response, HttpServletResponse.SC_OK, resolveResult.getContentType(), resolveResult.getContent());
-			return;
 		} else {
 
 			WebUniResolver.sendResponse(response, HttpServletResponse.SC_OK, ResolveResult.MIME_TYPE, resolveResult.toJson());
-			return;
 		}
 	}
 }

@@ -19,20 +19,16 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.2.3</version>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.4.18.v20190429</version>
+				<version>9.4.30.v20200611</version>
 				<configuration>
 					<jettyConfig>
 						${basedir}/src/test/resources/jetty.xml
 					</jettyConfig>
-					<jettyEnvXml>
-						${basedir}/src/test/resources/jetty-env.xml
-					</jettyEnvXml>
-					<contextPath>/</contextPath>
 					<useTestClasspath>true</useTestClasspath>
 					<systemProperties>
 						<systemProperty>
@@ -51,25 +47,29 @@
 					<webApp>
 						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
 						<containerIncludeJarPattern>^$</containerIncludeJarPattern>
+						<jettyEnvXml>
+							${basedir}/src/test/resources/jetty-env.xml
+						</jettyEnvXml>
+						<contextPath>/</contextPath>
 					</webApp>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-api</artifactId>
-						<version>1.7.25</version>
+						<version>1.7.30</version>
 						<scope>compile</scope>
 					</dependency>
 					<dependency>
 						<groupId>org.slf4j</groupId>
 						<artifactId>jcl-over-slf4j</artifactId>
-						<version>1.7.25</version>
+						<version>1.7.30</version>
 						<scope>compile</scope>
 					</dependency>
 					<dependency>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
-						<version>1.7.25</version>
+						<version>1.7.30</version>
 						<scope>compile</scope>
 					</dependency>
 				</dependencies>
@@ -82,8 +82,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -95,8 +95,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>3.2.15.RELEASE</version>
-			<scope>compile</scope>
+			<version>5.2.7.RELEASE</version>
 		</dependency>
 	</dependencies>
 

@@ -1,5 +1,7 @@
 package uniresolver.driver.servlet;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -14,7 +16,7 @@ public class InitServlet extends HttpServlet implements Servlet {
 
 	private static final long serialVersionUID = 3165107149874392145L;
 
-	private static Logger log = LoggerFactory.getLogger(InitServlet.class);
+	private static final Logger log = LoggerFactory.getLogger(InitServlet.class);
 
 	private static Driver driver = null;
 
@@ -37,15 +39,18 @@ public class InitServlet extends HttpServlet implements Servlet {
 			try {
 
 				driverClass = driverClassName == null ? null : (Class<? extends Driver>) Class.forName(driverClassName);
-				driver = driverClass == null ? null : driverClass.newInstance();
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+				driver = driverClass == null ? null : driverClass.getDeclaredConstructor().newInstance();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException
+					| InvocationTargetException ex) {
 
 				throw new ServletException(ex.getMessage(), ex);
 			}
 
-			if (driver == null) throw new ServletException("Unable to load driver: " + driverClassName);
+			if (driver == null)
+				throw new ServletException("Unable to load driver: " + driverClassName);
 
-			if (log.isInfoEnabled()) log.info("Loaded driver: " + driverClass);
+			if (log.isInfoEnabled())
+				log.info("Loaded driver: " + driverClass);
 		}
 	}
 

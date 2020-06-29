@@ -68,31 +68,31 @@ public class ResolveResult {
 
 	public static ResolveResult build(DIDDocument didDocument) {
 
-		return new ResolveResult(didDocument, null, DIDDocument.MIME_TYPE, new HashMap<String, Object> (), new HashMap<String, Object> ());
+		return new ResolveResult(didDocument, null, DIDDocument.MIME_TYPE, new HashMap<>(), new HashMap<>());
 	}
 
 	public static ResolveResult build(Map<String, Object> didDocument) {
 
-		return new ResolveResult(DIDDocument.build(didDocument), null, DIDDocument.MIME_TYPE, new HashMap<String, Object> (), new HashMap<String, Object> ());
+		return new ResolveResult(DIDDocument.build(didDocument), null, DIDDocument.MIME_TYPE, new HashMap<>(), new HashMap<>());
 	}
 
 	public static ResolveResult build() {
 
-		return new ResolveResult(null, null, null, new HashMap<String, Object> (), new HashMap<String, Object> ());
+		return new ResolveResult(null, null, null, new HashMap<>(), new HashMap<>());
 	}
 
 	public ResolveResult copy() {
 
-		return new ResolveResult(this.getDidDocument(), this.getContent(), this.getContentType(), this.getResolverMetadata(), this.getMethodMetadata());
+		return new ResolveResult(this.didDocument, this.content, this.contentType, this.resolverMetadata, this.methodMetadata);
 	}
 
 	public void reset() {
 
-		this.setDidDocument(null);
-		this.setContent(null);
-		this.setContentType(null);
-		this.setResolverMetadata(new HashMap<String, Object> ());
-		this.setMethodMetadata(new HashMap<String, Object> ());
+		this.didDocument = null;
+		this.content = null;
+		this.contentType = null;
+		this.resolverMetadata = new HashMap<>();
+		this.methodMetadata = new HashMap<>();
 	}
 
 	/*

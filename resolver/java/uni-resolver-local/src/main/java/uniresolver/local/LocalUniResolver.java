@@ -34,10 +34,10 @@ import uniresolver.result.ResolveResult;
 
 public class LocalUniResolver implements UniResolver {
 
-	private static Logger log = LoggerFactory.getLogger(LocalUniResolver.class);
+	private static final Logger log = LoggerFactory.getLogger(LocalUniResolver.class);
 
-	private Map<String, Driver> drivers = new HashMap<String, Driver> ();
-	private List<Extension> extensions = new ArrayList<Extension> ();
+	private Map<String, Driver> drivers = new HashMap<>();
+	private List<Extension> extensions = new ArrayList<>();
 
 	public LocalUniResolver() {
 
@@ -47,7 +47,7 @@ public class LocalUniResolver implements UniResolver {
 
 		final Gson gson = new Gson();
 
-		Map<String, Driver> drivers = new HashMap<String, Driver> ();
+		Map<String, Driver> drivers = new HashMap<>();
 
 		try (Reader reader = new FileReader(new File(filePath))) {
 
@@ -96,7 +96,7 @@ public class LocalUniResolver implements UniResolver {
 
 					id = "driver";
 					if (image != null) id += "-" + image;
-					if (image == null || drivers.containsKey(id)) id += "-" + Integer.toString(i);
+					if (image == null || drivers.containsKey(id)) id += "-" + i;
 				}
 
 				drivers.put(id, driver);
@@ -106,7 +106,7 @@ public class LocalUniResolver implements UniResolver {
 		}
 
 		LocalUniResolver localUniResolver = new LocalUniResolver();
-		localUniResolver.setDrivers(drivers);
+		localUniResolver.drivers = drivers;
 
 		return localUniResolver;
 	}
@@ -122,7 +122,7 @@ public class LocalUniResolver implements UniResolver {
 
 		if (identifier == null) throw new NullPointerException();
 
-		if (this.getDrivers() == null) throw new ResolutionException("No drivers configured.");
+		if (this.drivers == null) throw new ResolutionException("No drivers configured.");
 
 		// start time
 
@@ -152,7 +152,7 @@ public class LocalUniResolver implements UniResolver {
 
 		if (! extensionStatus.skipExtensionsBefore()) {
 
-			for (Extension extension : this.getExtensions()) {
+			for (Extension extension : this.extensions) {
 
 				extensionStatus.or(extension.beforeResolve(identifier, didUrl, options, resolveResult, this));
 				if (extensionStatus.skipExtensionsBefore()) break;
@@ -179,7 +179,7 @@ public class LocalUniResolver implements UniResolver {
 
 		if (! extensionStatus.skipExtensionsAfter()) {
 
-			for (Extension extension : this.getExtensions()) {
+			for (Extension extension : this.extensions) {
 
 				extensionStatus.or(extension.afterResolve(identifier, didUrl, options, resolveResult, this));
 				if (extensionStatus.skipExtensionsAfter()) break;
@@ -190,7 +190,7 @@ public class LocalUniResolver implements UniResolver {
 
 		long stop = System.currentTimeMillis();
 
-		resolveResult.getResolverMetadata().put("duration", Long.valueOf(stop - start));
+		resolveResult.getResolverMetadata().put("duration", stop - start);
 
 		// done
 
@@ -200,11 +200,11 @@ public class LocalUniResolver implements UniResolver {
 	@Override
 	public Map<String, Map<String, Object>> properties() throws ResolutionException {
 
-		if (this.getDrivers() == null) throw new ResolutionException("No drivers configured.");
+		if (this.drivers == null) throw new ResolutionException("No drivers configured.");
 
-		Map<String, Map<String, Object>> properties = new HashMap<String, Map<String, Object>> ();
+		Map<String, Map<String, Object>> properties = new HashMap<>();
 
-		for (Entry<String, Driver> driver : this.getDrivers().entrySet()) {
+		for (Entry<String, Driver> driver : this.drivers.entrySet()) {
 
 			if (log.isDebugEnabled()) log.debug("Loading properties for driver " + driver.getKey() + " (" + driver.getValue().getClass().getSimpleName() + ")");
 
@@ -221,17 +221,17 @@ public class LocalUniResolver implements UniResolver {
 
 	public void resolveWithDrivers(String resolveIdentifier, ResolveResult resolveResult) throws ResolutionException {
 
-		ResolveResult driverResolveResult = null;
+		ResolveResult driverResolveResult;
 		String usedDriverId = null;
 
-		for (Entry<String, Driver> driver : this.getDrivers().entrySet()) {
+		for (Entry<String, Driver> driver : this.drivers.entrySet()) {
 
 			if (log.isDebugEnabled()) log.debug("Attemping to resolve " + resolveIdentifier + " with driver " + driver.getValue().getClass());
 			driverResolveResult = driver.getValue().resolve(resolveIdentifier);
 
 			if (driverResolveResult != null && driverResolveResult.getDidDocument() != null && driverResolveResult.getDidDocument().getJsonLdObject().isEmpty()) {
 
-				driverResolveResult.setDidDocument((DIDDocument) null);
+				driverResolveResult.setDidDocument(null);
 			}
 
 			if (driverResolveResult != null) {
@@ -251,7 +251,7 @@ public class LocalUniResolver implements UniResolver {
 			if (log.isDebugEnabled()) log.debug("Resolved " + resolveIdentifier + " with driver " + usedDriverId);
 		} else {
 
-			if (log.isDebugEnabled()) log.debug("No result with " + this.getDrivers().size() + " drivers.");
+			if (log.isDebugEnabled()) log.debug("No result with " + this.drivers.size() + " drivers.");
 		}
 
 		resolveResult.getResolverMetadata().put("identifier", resolveIdentifier);
@@ -269,7 +269,7 @@ public class LocalUniResolver implements UniResolver {
 	@SuppressWarnings("unchecked")
 	public <T extends Driver> T getDriver(Class<T> driverClass) {
 
-		for (Driver driver : this.getDrivers().values()) {
+		for (Driver driver : this.drivers.values()) {
 
 			if (driverClass.isAssignableFrom(driver.getClass())) return (T) driver;
 		}

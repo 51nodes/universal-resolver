@@ -21,7 +21,7 @@ import uniresolver.result.ResolveResult;
 
 public class ServiceParameterExtension extends AbstractParameterExtension implements ParameterExtension {
 
-	private static Logger log = LoggerFactory.getLogger(ServiceParameterExtension.class);
+	private static final Logger log = LoggerFactory.getLogger(ServiceParameterExtension.class);
 
 	private static final String[] HANDLES_PARAMETERS = new String[] { "service", "service-type", "key", "key-type" };
 
@@ -75,7 +75,7 @@ public class ServiceParameterExtension extends AbstractParameterExtension implem
 	public static Map<Integer, Service> selectServices(DIDDocument didDocument, String selectServiceName, String selectServiceType) {
 
 		int i = -1;
-		Map<Integer, Service> selectedServices = new HashMap<Integer, Service> ();
+		Map<Integer, Service> selectedServices = new HashMap<>();
 		if (didDocument.getServices() == null) return selectedServices;
 
 		for (Service service : didDocument.getServices()) {
@@ -97,7 +97,7 @@ public class ServiceParameterExtension extends AbstractParameterExtension implem
 				if (! Arrays.asList(service.getTypes()).contains(selectServiceType)) continue;
 			}
 
-			selectedServices.put(Integer.valueOf(i), service);
+			selectedServices.put(i, service);
 		}
 
 		return selectedServices;
@@ -106,7 +106,7 @@ public class ServiceParameterExtension extends AbstractParameterExtension implem
 	public static Map<Integer, PublicKey> selectKeys(DIDDocument didDocument, String selectKeyName, String selectKeyType) {
 
 		int i = -1;
-		Map<Integer, PublicKey> selectedKeys = new HashMap<Integer, PublicKey> ();
+		Map<Integer, PublicKey> selectedKeys = new HashMap<>();
 		if (didDocument.getPublicKeys() == null) return selectedKeys;
 
 		for (PublicKey publicKey : didDocument.getPublicKeys()) {
@@ -128,7 +128,7 @@ public class ServiceParameterExtension extends AbstractParameterExtension implem
 				if (! Arrays.asList(publicKey.getTypes()).contains(selectKeyType)) continue;
 			}
 
-			selectedKeys.put(Integer.valueOf(i), publicKey);
+			selectedKeys.put(i, publicKey);
 		}
 
 		return selectedKeys;

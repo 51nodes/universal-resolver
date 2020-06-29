@@ -29,7 +29,7 @@ public class HttpDriver implements Driver {
 
 	public static final String MIME_TYPES = ResolveResult.MIME_TYPE + "," + DIDDocument.MIME_TYPE + "," + "application/ld+json";
 
-	private static Logger log = LoggerFactory.getLogger(HttpDriver.class);
+	private static final Logger log = LoggerFactory.getLogger(HttpDriver.class);
 
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -52,23 +52,23 @@ public class HttpDriver implements Driver {
 	@Override
 	public ResolveResult resolve(String identifier) throws ResolutionException {
 
-		if (this.getPattern() == null || this.getResolveUri() == null) return null;
+		if (this.pattern == null || this.resolveUri == null) return null;
 
 		// match identifier
 
 		String matchedIdentifier = null;
 
-		if (this.getPattern() != null) {
+		if (this.pattern != null) {
 
-			Matcher matcher = this.getPattern().matcher(identifier);
+			Matcher matcher = this.pattern.matcher(identifier);
 
 			if (! matcher.matches()) {
 
-				if (log.isDebugEnabled()) log.debug("Skipping identifier " + identifier + " - does not match pattern " + this.getPattern());
+				if (log.isDebugEnabled()) log.debug("Skipping identifier " + identifier + " - does not match pattern " + this.pattern);
 				return null;
 			} else {
 
-				if (log.isDebugEnabled()) log.debug("Identifier " + identifier + " matches pattern " + this.getPattern() + " with " + matcher.groupCount() + " groups");
+				if (log.isDebugEnabled()) log.debug("Identifier " + identifier + " matches pattern " + this.pattern + " with " + matcher.groupCount() + " groups");
 			}
 
 			if (matcher.groupCount() > 0) {
@@ -88,7 +88,7 @@ public class HttpDriver implements Driver {
 
 		try {
 
-			if ("url".equals(this.getEncodeIdentifier())) encodedIdentifier = URLEncoder.encode(matchedIdentifier, "UTF-8");
+			if ("url".equals(this.encodeIdentifier)) encodedIdentifier = URLEncoder.encode(matchedIdentifier, "UTF-8");
 			else encodedIdentifier = matchedIdentifier;
 		} catch (UnsupportedEncodingException ex) {
 
@@ -99,7 +99,7 @@ public class HttpDriver implements Driver {
 
 		// prepare HTTP request
 
-		String uriString = this.getResolveUri().toString();
+		String uriString = this.resolveUri.toString();
 
 		if (uriString.contains("$1")) {
 
@@ -119,7 +119,7 @@ public class HttpDriver implements Driver {
 
 		if (log.isDebugEnabled()) log.debug("Request for identifier " + identifier + " to: " + uriString);
 
-		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.getHttpClient().execute(httpGet)) {
+		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.httpClient.execute(httpGet)) {
 
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String statusMessage = httpResponse.getStatusLine().getReasonPhrase();
@@ -165,14 +165,14 @@ public class HttpDriver implements Driver {
 
 		// prepare properties
 
-		Map<String, Object> httpProperties = new HashMap<String, Object> ();
+		Map<String, Object> httpProperties = new HashMap<>();
 
-		if (this.getResolveUri() != null) httpProperties.put("resolveUri", this.getResolveUri().toString());
-		if (this.getPropertiesUri() != null) httpProperties.put("propertiesUri", this.getPropertiesUri().toString());
-		if (this.getPattern() != null) httpProperties.put("pattern", this.getPattern().toString());
-		if (this.getEncodeIdentifier() != null) httpProperties.put("encodeIdentifier", this.getEncodeIdentifier());
+		if (this.resolveUri != null) httpProperties.put("resolveUri", this.resolveUri.toString());
+		if (this.propertiesUri != null) httpProperties.put("propertiesUri", this.propertiesUri.toString());
+		if (this.pattern != null) httpProperties.put("pattern", this.pattern.toString());
+		if (this.encodeIdentifier != null) httpProperties.put("encodeIdentifier", this.encodeIdentifier);
 
-		Map<String, Object> properties = new HashMap<String, Object> ();
+		Map<String, Object> properties = new HashMap<>();
 		properties.put("http", httpProperties);
 
 		// remote properties
@@ -194,11 +194,11 @@ public class HttpDriver implements Driver {
 
 	public Map<String, Object> remoteProperties() throws ResolutionException {
 
-		if (this.getPropertiesUri() == null) return null;
+		if (this.propertiesUri == null) return null;
 
 		// prepare HTTP request
 
-		String uriString = this.getPropertiesUri().toString();
+		String uriString = this.propertiesUri.toString();
 
 		HttpGet httpGet = new HttpGet(URI.create(uriString));
 		httpGet.addHeader("Accept", Driver.PROPERTIES_MIME_TYPE);
@@ -209,7 +209,7 @@ public class HttpDriver implements Driver {
 
 		if (log.isDebugEnabled()) log.debug("Request to: " + uriString);
 
-		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.getHttpClient().execute(httpGet)) {
+		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.httpClient.execute(httpGet)) {
 
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String statusMessage = httpResponse.getStatusLine().getReasonPhrase();

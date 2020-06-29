@@ -15,7 +15,7 @@ import uniresolver.result.ResolveResult;
 
 public class RedirectExtension extends AbstractExtension implements Extension {
 
-	private static Logger log = LoggerFactory.getLogger(RedirectExtension.class);
+	private static final Logger log = LoggerFactory.getLogger(RedirectExtension.class);
 
 	@Override
 	public ExtensionStatus afterResolve(String identifier, DIDURL didUrl, Map<String, String> options, ResolveResult resolveResult, LocalUniResolver localUniResolver) throws ResolutionException {

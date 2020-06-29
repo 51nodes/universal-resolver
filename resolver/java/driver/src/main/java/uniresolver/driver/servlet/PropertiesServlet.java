@@ -19,7 +19,7 @@ public class PropertiesServlet extends AbstractServlet implements Servlet {
 
 	private static final long serialVersionUID = -2093931014950367385L;
 
-	private static Logger log = LoggerFactory.getLogger(PropertiesServlet.class);
+	private static final Logger log = LoggerFactory.getLogger(PropertiesServlet.class);
 
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 

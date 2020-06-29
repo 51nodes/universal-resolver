@@ -7,8 +7,8 @@ import uniresolver.result.ResolveResult;
 
 public interface Driver {
 
-	public static final String PROPERTIES_MIME_TYPE = "application/json";
+	String PROPERTIES_MIME_TYPE = "application/json";
 
-	public ResolveResult resolve(String identifier) throws ResolutionException;
-	public Map<String, Object> properties() throws ResolutionException;
+	ResolveResult resolve(String identifier) throws ResolutionException;
+	Map<String, Object> properties() throws ResolutionException;
 }

@@ -18,7 +18,7 @@ public class ResolveServlet extends AbstractServlet implements Servlet {
 
 	private static final long serialVersionUID = -531456245094927384L;
 
-	private static Logger log = LoggerFactory.getLogger(ResolveServlet.class);
+	private static final Logger log = LoggerFactory.getLogger(ResolveServlet.class);
 
 	public ResolveServlet() {
 

@@ -23,7 +23,7 @@ import uniresolver.result.ResolveResult;
 
 public class ClientUniResolver implements UniResolver {
 
-	private static Logger log = LoggerFactory.getLogger(ClientUniResolver.class);
+	private static final Logger log = LoggerFactory.getLogger(ClientUniResolver.class);
 
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -64,7 +64,7 @@ public class ClientUniResolver implements UniResolver {
 
 		// prepare HTTP request
 
-		String uriString = this.getResolveUri().toString();
+		String uriString = this.resolveUri.toString();
 		if (! uriString.endsWith("/")) uriString += "/";
 		uriString += encodedIdentifier;
 
@@ -77,7 +77,7 @@ public class ClientUniResolver implements UniResolver {
 
 		if (log.isDebugEnabled()) log.debug("Request for identifier " + identifier + " to: " + uriString);
 
-		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.getHttpClient().execute(httpGet)) {
+		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.httpClient.execute(httpGet)) {
 
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String statusMessage = httpResponse.getStatusLine().getReasonPhrase();
@@ -116,7 +116,7 @@ public class ClientUniResolver implements UniResolver {
 
 		// prepare HTTP request
 
-		String uriString = this.getPropertiesUri().toString();
+		String uriString = this.propertiesUri.toString();
 
 		HttpGet httpGet = new HttpGet(URI.create(uriString));
 		httpGet.addHeader("Accept", UniResolver.PROPERTIES_MIME_TYPE);
@@ -127,7 +127,7 @@ public class ClientUniResolver implements UniResolver {
 
 		if (log.isDebugEnabled()) log.debug("Request to: " + uriString);
 
-		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.getHttpClient().execute(httpGet)) {
+		try (CloseableHttpResponse httpResponse = (CloseableHttpResponse) this.httpClient.execute(httpGet)) {
 
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String statusMessage = httpResponse.getStatusLine().getReasonPhrase();
